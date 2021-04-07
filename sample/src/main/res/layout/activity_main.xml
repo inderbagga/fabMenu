@@ -31,28 +31,22 @@
             android:id="@+id/mode_cycle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/black_default"
             fab:fab_icon="@drawable/menu_bike_off"
-            fab:fab_title="Be a Cyclist."
-            fab:fab_colorPressed="@color/grey_pressed"/>
+            fab:fab_title="Be a Cyclist."/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/mode_ped"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/black_default"
             fab:fab_icon="@drawable/menu_walk_off"
-            fab:fab_title="Be a Pedestrian."
-            fab:fab_colorPressed="@color/grey_pressed"/>
+            fab:fab_title="Be a Pedestrian."/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/disconnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/black_default"
             android:visibility="gone"
-            fab:fab_title="Disconnect."
-            fab:fab_colorPressed="@color/grey_pressed"/>
+            fab:fab_title="Disconnect."/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

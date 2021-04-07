@@ -35,7 +35,6 @@ public class MainActivity extends Activity implements OnClickListener{
 
   }
 
-  @TargetApi(Build.VERSION_CODES.O)
   @Override
   public void onClick(View v) {
 
