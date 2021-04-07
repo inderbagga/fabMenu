@@ -37,7 +37,7 @@ public class FloatingActionsMenu extends ViewGroup {
   private static final float COLLAPSED_PLUS_ROTATION = 0f;
   private static final float EXPANDED_PLUS_ROTATION = 90f + 45f;
 
-  private int mAddButtonPlusColor;
+  //private int mAddButtonPlusColor;
   private int mAddButtonColorNormal;
   private int mAddButtonColorPressed;
   private int mAddButtonSize;
@@ -52,7 +52,7 @@ public class FloatingActionsMenu extends ViewGroup {
 
   private AnimatorSet mExpandAnimation = new AnimatorSet().setDuration(ANIMATION_DURATION);
   private AnimatorSet mCollapseAnimation = new AnimatorSet().setDuration(ANIMATION_DURATION);
-  private AddFloatingActionButton mAddButton;
+  private FloatingActionButton mAddButton;
   private RotatingDrawable mRotatingDrawable;
   private int mMaxButtonWidth;
   private int mMaxButtonHeight;
@@ -92,7 +92,7 @@ public class FloatingActionsMenu extends ViewGroup {
     setTouchDelegate(mTouchDelegateGroup);
 
     TypedArray attr = context.obtainStyledAttributes(attributeSet, R.styleable.FloatingActionsMenu, 0, 0);
-    mAddButtonPlusColor = attr.getColor(R.styleable.FloatingActionsMenu_fab_addButtonPlusIconColor, getColor(android.R.color.white));
+    //mAddButtonPlusColor = attr.getColor(R.styleable.FloatingActionsMenu_fab_addButtonPlusIconColor, getColor(android.R.color.white));
     mAddButtonColorNormal = attr.getColor(R.styleable.FloatingActionsMenu_fab_addButtonColorNormal, getColor(android.R.color.holo_blue_dark));
     mAddButtonColorPressed = attr.getColor(R.styleable.FloatingActionsMenu_fab_addButtonColorPressed, getColor(android.R.color.holo_blue_light));
     mAddButtonSize = attr.getInt(R.styleable.FloatingActionsMenu_fab_addButtonSize, FloatingActionButton.SIZE_NORMAL);
@@ -145,10 +145,11 @@ public class FloatingActionsMenu extends ViewGroup {
   }
 
   private void createAddButton(Context context) {
-    mAddButton = new AddFloatingActionButton(context) {
+
+    mAddButton = new FloatingActionButton(context) {
       @Override
       void updateBackground() {
-        mPlusColor = mAddButtonPlusColor;
+       // mPlusColor = mAddButtonPlusColor;
         mColorNormal = mAddButtonColorNormal;
         mColorPressed = mAddButtonColorPressed;
         mStrokeVisible = mAddButtonStrokeVisible;
@@ -168,8 +169,8 @@ public class FloatingActionsMenu extends ViewGroup {
         collapseAnimator.setInterpolator(interpolator);
         expandAnimator.setInterpolator(interpolator);
 
-        mExpandAnimation.play(expandAnimator);
-        mCollapseAnimation.play(collapseAnimator);
+       /* mExpandAnimation.play(expandAnimator);
+        mCollapseAnimation.play(collapseAnimator);*/
 
         return rotatingDrawable;
       }
@@ -184,8 +185,14 @@ public class FloatingActionsMenu extends ViewGroup {
       }
     });
 
+    mAddButton.setIcon(R.drawable.menu_minus_on);
+
     addView(mAddButton, super.generateDefaultLayoutParams());
     mButtonsCount++;
+  }
+
+  public void updateAddButton(int drawable) {
+    mAddButton.setIcon(drawable);
   }
 
   public void addButton(FloatingActionButton button) {
@@ -202,6 +209,10 @@ public class FloatingActionsMenu extends ViewGroup {
     removeView(button);
     button.setTag(R.id.fab_label, null);
     mButtonsCount--;
+  }
+
+  public void updateButton(FloatingActionButton button,Drawable drawable) {
+   button.setIconDrawable(drawable);
   }
 
   private int getColor(@ColorRes int id) {

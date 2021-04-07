@@ -3,88 +3,116 @@ package com.getbase.floatingactionbutton.sample;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnClickListener{
+
+  FloatingActionsMenu modeMenu;
+  FloatingActionButton motorMode,cycleMode,pedMode,disMode;
+
+  byte modeValue=0;//1-2(motor),3-4(cycle),5-6(ped)
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    findViewById(R.id.pink_icon).setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Toast.makeText(MainActivity.this, "Clicked pink Floating Action Button", Toast.LENGTH_SHORT).show();
-      }
-    });
+    modeMenu =(FloatingActionsMenu) findViewById(R.id.mode_menu);
+    motorMode =(FloatingActionButton) findViewById(R.id.mode_motor);
+    cycleMode=(FloatingActionButton) findViewById(R.id.mode_cycle);
+    pedMode =(FloatingActionButton) findViewById(R.id.mode_ped);
+    disMode =(FloatingActionButton) findViewById(R.id.disconnect);
 
-    FloatingActionButton button = (FloatingActionButton) findViewById(R.id.setter);
-    button.setSize(FloatingActionButton.SIZE_MINI);
-    button.setColorNormalResId(R.color.pink);
-    button.setColorPressedResId(R.color.pink_pressed);
-    button.setIcon(R.drawable.ic_fab_star);
-    button.setStrokeVisible(false);
+    disMode.setOnClickListener(this);
+    motorMode.setOnClickListener(this);
+    cycleMode.setOnClickListener(this);
+    pedMode.setOnClickListener(this);
 
-    final View actionB = findViewById(R.id.action_b);
+  }
 
-    FloatingActionButton actionC = new FloatingActionButton(getBaseContext());
-    actionC.setTitle("Hide/Show Action above");
-    actionC.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        actionB.setVisibility(actionB.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-      }
-    });
+  @TargetApi(Build.VERSION_CODES.O)
+  @Override
+  public void onClick(View v) {
 
-    final FloatingActionsMenu menuMultipleActions = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
-    menuMultipleActions.addButton(actionC);
+    modeMenu.collapse();
 
-    final FloatingActionButton removeAction = (FloatingActionButton) findViewById(R.id.button_remove);
-    removeAction.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        ((FloatingActionsMenu) findViewById(R.id.multiple_actions_down)).removeButton(removeAction);
-      }
-    });
+    switch (v.getId()){
 
-    ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
-    drawable.getPaint().setColor(getResources().getColor(R.color.white));
-    ((FloatingActionButton) findViewById(R.id.setter_drawable)).setIconDrawable(drawable);
+      case R.id.mode_motor:
 
-    final FloatingActionButton actionA = (FloatingActionButton) findViewById(R.id.action_a);
-    actionA.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        actionA.setTitle("Action A clicked");
-      }
-    });
+        if(modeValue==0||modeValue>2){
+          modeValue=1;
+          modeMenu.updateAddButton(R.drawable.menu_auto_on);
+          motorMode.setVisibility(View.GONE);
+          cycleMode.setIconDrawable(getDrawable(R.drawable.menu_bike_off));
+          cycleMode.setTitle("Be a Cyclist.");
+          cycleMode.setVisibility(View.VISIBLE);
+          pedMode.setIconDrawable(getDrawable(R.drawable.menu_walk_off));
+          pedMode.setTitle("Be a Pedestrian.");
+          disMode.setIconDrawable(getDrawable(R.drawable.menu_minus_off));
+          disMode.setTitle("Disconnect.");
+          disMode.setVisibility(View.VISIBLE);
+          pedMode.setVisibility(View.VISIBLE);
+        }
 
-    // Test that FAMs containing FABs with visibility GONE do not cause crashes
-    findViewById(R.id.button_gone).setVisibility(View.GONE);
+        break;
+      case R.id.mode_cycle:
 
-    final FloatingActionButton actionEnable = (FloatingActionButton) findViewById(R.id.action_enable);
-    actionEnable.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        menuMultipleActions.setEnabled(!menuMultipleActions.isEnabled());
-      }
-    });
+        if(modeValue<3||modeValue>4) {
+          modeValue = 3;
+          modeMenu.updateAddButton(R.drawable.menu_bike_on);
+          motorMode.setIconDrawable(getDrawable(R.drawable.menu_auto_off));
+          motorMode.setTitle("Be a Motorist.");
+          motorMode.setVisibility(View.VISIBLE);
+          cycleMode.setVisibility(View.GONE);
+          pedMode.setIconDrawable(getDrawable(R.drawable.menu_walk_off));
+          pedMode.setTitle("Be a Pedestrian.");
+          disMode.setIconDrawable(getDrawable(R.drawable.menu_minus_off));
+          disMode.setTitle("Disconnect.");
+          disMode.setVisibility(View.VISIBLE);
+          pedMode.setVisibility(View.VISIBLE);
+        }
+        break;
+      case R.id.mode_ped:
 
-    FloatingActionsMenu rightLabels = (FloatingActionsMenu) findViewById(R.id.right_labels);
-    FloatingActionButton addedOnce = new FloatingActionButton(this);
-    addedOnce.setTitle("Added once");
-    rightLabels.addButton(addedOnce);
+        if(modeValue<5) {
+          modeValue = 5;
+          modeMenu.updateAddButton(R.drawable.menu_walk_on);
+          motorMode.setIconDrawable(getDrawable(R.drawable.menu_auto_off));
+          motorMode.setTitle("Be a Motorist.");
+          motorMode.setVisibility(View.VISIBLE);
+          cycleMode.setIconDrawable(getDrawable(R.drawable.menu_bike_off));
+          cycleMode.setTitle("Be a Cyclist.");
+          cycleMode.setVisibility(View.VISIBLE);
+          disMode.setIconDrawable(getDrawable(R.drawable.menu_minus_off));
+          disMode.setTitle("Disconnect.");
+          disMode.setVisibility(View.VISIBLE);
+          pedMode.setVisibility(View.GONE);
+        }
+        break;
 
-    FloatingActionButton addedTwice = new FloatingActionButton(this);
-    addedTwice.setTitle("Added twice");
-    rightLabels.addButton(addedTwice);
-    rightLabels.removeButton(addedTwice);
-    rightLabels.addButton(addedTwice);
+        case R.id.disconnect:
+
+        if(modeValue!=0) {
+          modeValue = 0;
+          modeMenu.updateAddButton(R.drawable.menu_minus_on);
+          motorMode.setIconDrawable(getDrawable(R.drawable.menu_auto_off));
+          motorMode.setTitle("Be a Motorist.");
+          motorMode.setVisibility(View.VISIBLE);
+          cycleMode.setIconDrawable(getDrawable(R.drawable.menu_bike_off));
+          cycleMode.setTitle("Be a Cyclist.");
+          cycleMode.setVisibility(View.VISIBLE);
+          pedMode.setIconDrawable(getDrawable(R.drawable.menu_walk_off));
+          pedMode.setTitle("Be a Pedestrian.");
+          pedMode.setVisibility(View.VISIBLE);
+          disMode.setVisibility(View.GONE);
+        }
+        break;
+    }
   }
 }
